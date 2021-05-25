@@ -17,13 +17,12 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run: echo "hello"
-    requires:
-       - print_hello
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-#      - welcome/run
       - print_hello
-      - print_world
+      - print_world:
+          requires: 
+            - print_hello
