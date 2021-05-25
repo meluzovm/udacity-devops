@@ -1,0 +1,48 @@
+Parameters:
+  mmVPC:
+    Description: "VPC"
+    Type: AWS::EC2::VPC::Id
+  #vpc-2fc15345
+  mmPublicSubnet:
+    Description: "Public subnet"
+    Type: AWS::EC2::Subnet::Id
+  mmAMI: 
+    Description: "AMZN Linux 2"
+    Type: AWS::EC2::Image::Id
+    Default: ami-043097594a7df80ec
+
+Resources:
+  mmSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Allows port 80"
+      GroupName: mmSecurityGroup
+      SecurityGroupEgress: 
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+      SecurityGroupIngress: 
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags: 
+        - Key: Name
+          Value: mmSecurityGroup
+      VpcId: !Ref mmVPC
+  mmEc2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: !Ref mmAMI
+      NetworkInterfaces: 
+      - AssociatePublicIpAddress: true
+        DeviceIndex: "0"
+        GroupSet: 
+          - Ref: "mmSecurityGroup"
+        SubnetId: !Ref mmPublicSubnet
+      UserData: !Base64 |
+         #!/bin/bash
+         sudo yum update -y
+         sudo yum install -y httpd
+         sudo systemctl start httpd
+         sudo systemctl enable httpd

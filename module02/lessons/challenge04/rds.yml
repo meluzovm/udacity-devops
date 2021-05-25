@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: |
+  Creates RDS database using imports from network.yml
+Parameters:
+  ProjectName:
+    Description: "Name of Project"
+    Type: String
+    Default: "somename"
+  RDSPassword:
+    Description: "Password for RDS User"
+    Type: String
+    MinLength: 8
+    MaxLength: 30
+    NoEcho: true
+Resources:
+  rdsSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "rds-sg"
+      GroupDescription:  "Allows access to port 3306"
+      VpcId: !ImportValue network-vpc
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 3306
+        ToPort: 3306
+        CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+      - IpProtocol: "-1"
+        CidrIp: 0.0.0.0/0
+
+  rdsDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Only Private Networks"
+      SubnetIds:
+        - !Select [0, !Split [",", !ImportValue network-PrivateSubnets]]
+        - !Select [1, !Split [",", !ImportValue network-PrivateSubnets]]
+      Tags:
+      - Key: keyname
+        Value: value
+  rdsDBInstance:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      AllocatedStorage: "10"
+      AvailabilityZone: !Select [0, !GetAZs '']
+      DBInstanceIdentifier: !Sub "${ProjectName}-rds"
+      DBName: !Sub "${ProjectName}rds"
+      DBInstanceClass: db.m4.large
+      DBSubnetGroupName: !Ref rdsDBSubnetGroup
+      Engine: MySQL
+      EngineVersion: 8.0.16
+      MasterUsername: mysqladmin
+      MasterUserPassword: !Ref RDSPassword
+      VPCSecurityGroups: [!Ref rdsSecurityGroup]
+    DeletionPolicy: "Retain"
+    UpdateReplacePolicy: "Retain"
+  
+      
+Outputs:
+  rdsDbEndpoint:
+    Description: RDS DB Endpoint
+    Value: !Join [":",[!GetAtt rdsDBInstance.Endpoint.Address, !GetAtt rdsDBInstance.Endpoint.Port ] ]
+
+  rdsDBInstance:
+    Description: RDS DB
+    Value: !Ref rdsDBInstance
+    Export: 
+      Name: !Sub "${ProjectName}-rds"
+
+
+

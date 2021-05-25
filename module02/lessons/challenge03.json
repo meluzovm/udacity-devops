@@ -1,0 +1,5 @@
+[
+{"ParameterKey": "VPCId",        "ParameterValue": "vpc-076ea381b77d95d18"},
+{"ParameterKey": "PrivateSubnetID",    "ParameterValue": "subnet-043cbb38001bbbeef"},
+{"ParameterKey": "KeyName",    "ParameterValue": "mm-udacity"}
+]
