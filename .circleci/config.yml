@@ -37,19 +37,19 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp
-      - run: cat output.txt
+      - run: cat /tmp/output.txt
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - print_hello
-      - print_world:
-          requires: 
-            - print_hello
-      - print_name:
-          requires: 
-            - print_world
+#      - print_hello
+#      - print_world:
+      #    requires: 
+      #      - print_hello
+      #- print_name:
+      #    requires: 
+      #      - print_world
       - save_hello_world_output
       - print_output_file
 
