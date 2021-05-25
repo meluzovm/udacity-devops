@@ -59,6 +59,23 @@ jobs:
           name: "failed"
           command: echo "previous step failed!"
           when: on_fail
+  ex6_create_inventory:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - run: echo "[all]" > inventory.txt
+      - run: aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --filters "Name=tag:Project,Values=udacity" \
+            --output text >> inventory.txt  
+      - save_cache:
+          key: $CIRCLE_SHA1
+          paths:
+            - inventory.txt
+      - run:
+          command: echo "something went wrong"
+          when: on_fail  
+
 
 workflows:
   # Name the workflow "welcome"
@@ -78,4 +95,5 @@ workflows:
             - "ex3_save_hello_world_output"
       - ex4_use_command
       - ex5_failed_job
+      - ex6_create_inventory
 
