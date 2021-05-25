@@ -50,6 +50,19 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - print_pipeline_id
+  ex5_failed_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run: return 1
+  ex5_run_only_after_failure:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - run:
+          name: "failed"
+          command: echo "previous job was failed!"
+          when: on_fail
 
 workflows:
   # Name the workflow "welcome"
@@ -68,3 +81,5 @@ workflows:
           requires:
             - "ex3_save_hello_world_output"
       - ex4_use_command
+      - ex5_failed_job
+
