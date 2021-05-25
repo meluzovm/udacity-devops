@@ -55,13 +55,9 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - run: return 1
-  ex5_run_only_after_failure:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
       - run:
           name: "failed"
-          command: echo "previous job was failed!"
+          command: echo "previous step failed!"
           when: on_fail
 
 workflows:
