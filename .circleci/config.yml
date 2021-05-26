@@ -99,7 +99,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible curl
+            apk add --update ansible
       - run: ls -la ~/project/task2/
       - run:
           name: Configure server
@@ -109,6 +109,10 @@ jobs:
     docker:
       - image: alpine:latest
     steps: 
+      - run:
+          name: Install curl
+          command: |
+            apk add --update curl
       - run: curl -s --head 3.67.226.177:3000
       - run:
           command: |
