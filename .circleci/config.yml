@@ -104,8 +104,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            ansible-playbook -i inventory.txt ~/project/task2/main-remote.yml
-
+            ansible-playbook -i inventory ~/project/task2/main-remote.yml
           
 workflows:
   # Name the workflow "welcome"
