@@ -64,6 +64,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - run: echo "[all]" > inventory.txt
+      - run: aws --version
       - run: aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters "Name=tag:Project,Values=udacity" \
