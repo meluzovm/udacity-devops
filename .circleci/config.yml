@@ -99,11 +99,12 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible 
+      - run: ls -la ~/project/task2/
       - run:
           name: Configure server
           command: |
-            ansible-playbook -i inventory.txt task2/main-remote.yml
-      - run: ls -la *
+            ansible-playbook -i inventory.txt ~/project/task2/main-remote.yml
+
           
 workflows:
   # Name the workflow "welcome"
