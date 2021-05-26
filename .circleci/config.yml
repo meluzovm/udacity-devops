@@ -101,6 +101,7 @@ jobs:
           command: |
             apk add --update ansible 
       - run: ls -la ~/project/task2/
+      - run: export ANSIBLE_HOST_KEY_CHECKING=False
       - run:
           name: Configure server
           command: |
