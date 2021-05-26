@@ -88,6 +88,22 @@ jobs:
       - run:
           command: aws cloudformation delete-stack --stack-name my-stack
           when: on_fail 
+  ex8_create_infrastructure:
+    docker: 
+      - image: python:3.7-alpine3.11
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+          - "df:9b:20:79:f0:d5:a4:1f:9e:52:0c:5c:f3:b8:bd:c6"
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible 
+      - run:
+          name: Configure server
+          command: |
+            ansible-playbook -i inventory.txt task2/main-remote.yml
+          
 workflows:
   # Name the workflow "welcome"
   welcome:
@@ -109,4 +125,7 @@ workflows:
 #     - ex5_failed_job
 #      - ex6_create_inventory
       - ex7_create_infrastructure
+  infrastructure:
+    jobs:
+    - ex8_create_infrastructure
 

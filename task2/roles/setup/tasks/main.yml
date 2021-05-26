@@ -1,0 +1,79 @@
+---
+- name: "update apt packages."
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: "install nodejs"
+  become: yes
+  apt:
+    state: latest
+    name: nodejs
+- name: "install npm"
+  become: yes
+  apt:
+    state: latest
+    name: npm
+    #name: ["nodejs", "npm"]
+
+##- name: Download latest nodejs
+##  get_url: 
+##    url: https://nodejs.org/dist/latest/node-v16.2.0-linux-x64.tar.gz
+##    dest: /tmp/node-v16.2.0-linux-x64.tar.gz 
+##
+##- name: Create directory
+##  become: yes
+##  file:
+##    path: /tmp/nodejs
+##    state: directory
+##
+##- name: "unarchive tar.gz"
+##  become: yes
+##  unarchive: 
+##    src: /tmp/node-v16.2.0-linux-x64.tar.gz 
+##    dest: /tmp/nodejs
+##    remote_src: yes
+##
+##- name: Install nodejs
+##  become: yes
+##  command: sudo {{ item }}
+##  args:
+##    chdir: /tmp/nodejs/node-v16.2.0-linux-x64
+##  with_items:
+##    - ls -la
+##    - ./configure
+##    - make
+##    - make install    
+##
+##- name: Install build-essential package
+##  become: yes
+##  apt:
+##    name: build-essential
+##    update_cache: yes
+##
+
+- name: "install pm2"
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
+
+- name: Copy index test page
+  template:
+    src: "files/index.js"
+    dest: "~/index.js"
+
+#- name: Start node
+#  shell: |
+#    node ~/index.js 
+
+- name: Executing node with pm2
+  shell: |
+    pm2 start ~/index.js -f
