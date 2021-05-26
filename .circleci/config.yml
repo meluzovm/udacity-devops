@@ -103,12 +103,13 @@ jobs:
           name: Configure server
           command: |
             ansible-playbook -i inventory.txt task2/main-remote.yml
+      - run: ls -la *
           
 workflows:
   # Name the workflow "welcome"
-  welcome:
+#  welcome:
     # Run the welcome/run job in its own container
-    jobs:
+#    jobs:
 #      - ex1_print_hello
 #      - ex1_print_world:
 #          requires: 
@@ -124,7 +125,7 @@ workflows:
 #      - ex4_use_command
 #     - ex5_failed_job
 #      - ex6_create_inventory
-      - ex7_create_infrastructure
+#      - ex7_create_infrastructure
   infrastructure:
     jobs:
     - ex8_create_infrastructure
