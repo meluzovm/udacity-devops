@@ -86,8 +86,8 @@ jobs:
       - checkout
       - run: echo ${CIRCLE_WORKFLOW_ID} 
       - run: aws cloudformation create-stack --stack-name aws-${CIRCLE_WORKFLOW_ID} --template-body file://module03-template.yml --parameters file://module03-properties.json 
-      - delete_infrastructure
-        when: on_fail 
+      - delete_infrastructure:
+          when: on_fail
   ex8_create_infrastructure:
     docker: 
       - image: python:3.7-alpine3.11
