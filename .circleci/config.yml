@@ -19,6 +19,7 @@ commands:
       - run:
           command: |
             aws cloudformation delete-stack --stack-name aws-${CIRCLE_WORKFLOW_ID}
+    when: << parameters.when_to_run >>
 
 jobs:
   ex1_print_hello:
@@ -92,8 +93,7 @@ jobs:
       - run: echo ${CIRCLE_WORKFLOW_ID} 
       - run: aws cloudformation create-stack --stack-name aws-${CIRCLE_WORKFLOW_ID} --template-body file://module03-template.yml --parameters file://module03-properties.json 
       - delete_infrastructure:
-          when: on_fail 
-
+          when_to_run: on_fail 
   ex8_create_infrastructure:
     docker: 
       - image: python:3.7-alpine3.11
@@ -130,7 +130,7 @@ jobs:
 #          when: on_success
       - run: return 1
       - delete_infrastructure:
-          when: on_fail 
+          when_to_run: on_fail 
 #Solution from udacity:
 #        - run:
 #            name: smoke test.
