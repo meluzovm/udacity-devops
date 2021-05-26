@@ -42,7 +42,7 @@ Resources:
       - AssociatePublicIpAddress: true
         DeviceIndex: "0"
         GroupSet: 
-          - ec2-sg-2
+          - sg-06f4f1a3fec8a0525
         SubnetId: !Select [0, !Split [",", !ImportValue network-PublicSubnets]]
       UserData: !Base64 |
         #!/bin/bash -ex

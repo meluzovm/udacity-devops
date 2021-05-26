@@ -113,7 +113,7 @@ jobs:
             export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -i inventory ~/project/task2/main-remote.yml
   ex9_smoke_test:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli    
     steps: 
       - run:
           name: Install curl
