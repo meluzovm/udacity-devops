@@ -1,3 +1,4 @@
+---
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
@@ -5,11 +6,15 @@ version: 2.1
 commands:
   print_pipeline_id:
     description: "A command to print Circle CI Workflow ID"
-    #parameters: 
+    # parameters: 
     steps:
       - run: echo $CIRCLE_WORKFLOW_ID
   delete_infrastructure:
     description: "Delete stack completely"
+    parameters:
+      when_to_run:
+        type: string
+        default: "on_fail"
     steps:
       - run:
           command: |
@@ -40,7 +45,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp
           paths:
-          - output.txt
+            - output.txt
   ex3_print_output_file:
     docker:
       - image: circleci/node:13.8.0
@@ -86,8 +91,8 @@ jobs:
       - checkout
       - run: echo ${CIRCLE_WORKFLOW_ID} 
       - run: aws cloudformation create-stack --stack-name aws-${CIRCLE_WORKFLOW_ID} --template-body file://module03-template.yml --parameters file://module03-properties.json 
-#      - delete_infrastructure
-#        when: on_fail 
+      - delete_infrastructure:
+          when: on_fail 
 
   ex8_create_infrastructure:
     docker: 
@@ -96,7 +101,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-          - "df:9b:20:79:f0:d5:a4:1f:9e:52:0c:5c:f3:b8:bd:c6"
+            - "df:9b:20:79:f0:d5:a4:1f:9e:52:0c:5c:f3:b8:bd:c6"
       - run:
           name: Install dependencies
           command: |
@@ -124,8 +129,8 @@ jobs:
 #            echo "OK: Web Server is  accessible"
 #          when: on_success
       - run: return 1
-      - delete_infrastructure
-        when: on_fail
+      - delete_infrastructure:
+          when: on_fail 
 #Solution from udacity:
 #        - run:
 #            name: smoke test.
@@ -169,4 +174,3 @@ workflows:
     - ex9_smoke_test:
         requires:
           - ex8_create_infrastructure
-
