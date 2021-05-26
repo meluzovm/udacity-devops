@@ -1,0 +1,4 @@
+[
+  {"ParameterKey": "Port",      "ParameterValue": "3000"},
+  {"ParameterKey": "KeyName",      "ParameterValue": "mm-udacity"}
+]

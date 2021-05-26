@@ -76,25 +76,34 @@ jobs:
       - run:
           command: echo "something went wrong"
           when: on_fail  
-
-
+  ex7_create_infrastructure:
+    docker:
+      - image: amazon/aws-cli     
+    steps:
+      - run: aws --version
+      - run: aws cloudformation create-stack --stack-name "aws-$CIRCLE_WORKFLOW_ID" --template-body file://module03-template.yml --parameters file://module03-properties.json --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM"
+      - run:
+          command: aws cloudformation destroy-stack --stack-name "aws-$CIRCLE_WORKFLOW_ID"
+          when: on_fail 
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - ex1_print_hello
-      - ex1_print_world:
-          requires: 
-            - ex1_print_hello
-      - ex2_print_name:
-          requires: 
-            - ex1_print_world
-      - ex3_save_hello_world_output
-      - ex3_print_output_file:
-          requires:
-            - "ex3_save_hello_world_output"
-      - ex4_use_command
-      - ex5_failed_job
-      - ex6_create_inventory
+#      - ex1_print_hello
+#      - ex1_print_world:
+#          requires: 
+#            - ex1_print_hello
+#      - ex2_print_name:
+#          requires: 
+#            - ex1_print_world
+#      - ex3_save_hello_world_output
+#      - ex3_print_output_file:
+#          requires:
+#            - "ex3_save_hello_world_output"
+#
+#      - ex4_use_command
+#     - ex5_failed_job
+#      - ex6_create_inventory
+      - ex7_create_infrastructure
 
