@@ -111,10 +111,12 @@ jobs:
     steps: 
       - run: curl -s --head 3.67.226.177:3000
       - run:
-          command: echo "ERROR: Web Server is not accessible"
+          command: |
+            echo 'ERROR: Web Server is not accessible'
           when: on_fail
       - run:
-          command: echo "OK: Web Server is  accessible"
+          command: |
+            echo "OK: Web Server is  accessible"
           when: on_success
 
           
