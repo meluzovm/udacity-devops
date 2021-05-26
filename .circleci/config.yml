@@ -2,7 +2,7 @@
 version: 2.1
 parameters:
   CFN_STACK_NAME:
-    type: env_var_name
+    type: string
     default: aws-${CIRCLE_WORKFLOW_ID} 
 # Use a package of configuration called an orb.
 commands:
