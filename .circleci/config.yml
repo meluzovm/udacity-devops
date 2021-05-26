@@ -101,11 +101,22 @@ jobs:
           command: |
             apk add --update ansible 
       - run: ls -la ~/project/task2/
-      - run: export ANSIBLE_HOST_KEY_CHECKING=False
       - run:
           name: Configure server
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -i inventory ~/project/task2/main-remote.yml
+  ex9_smoke_test:
+    docker:
+      - image: alpine:latest
+    steps: 
+      - run: curl -s --head 3.67.226.177:3000
+      - run:
+          command: echo "ERROR: Web Server is not accessible"
+          when: on_fail
+      - run:
+          command: echo "OK: Web Server is  accessible"
+          when: on_success
+
           
 workflows:
   # Name the workflow "welcome"
@@ -131,4 +142,7 @@ workflows:
   infrastructure:
     jobs:
     - ex8_create_infrastructure
+    - ex9_smoke_test:
+        requires:
+          - ex8_create_infrastructure
 
