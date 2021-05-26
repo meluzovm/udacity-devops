@@ -126,8 +126,8 @@ jobs:
       - run: 
           command: |
             return 1
-      - delete_infrastructure:
-          when: on_fail
+      - delete_infrastructure
+        when: on_fail
 #Solution from udacity:
 #        - run:
 #            name: smoke test.
