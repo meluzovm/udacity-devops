@@ -115,10 +115,10 @@ jobs:
     docker:
       - image: amazon/aws-cli    
     steps: 
-      - run:
-          name: Install curl
-          command: |
-            apk add --update curl
+#      - run:
+#          name: Install curl
+#          command: |
+#            yum install add --update curl
       - run: curl -s --head 3.67.226.177:3000
       - run:
           command: |
