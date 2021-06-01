@@ -11,8 +11,8 @@ jobs:
       - run: 
           name: create vars
           command: |
-            export MM_VAR_1=$(echo "var1")
-            export MM_VAR_2=$(echo "var2") 
+            export MM_VAR_1=$(echo "var1")  >> $BASH_ENV
+            export MM_VAR_2=$(echo "var2")  >> $BASH_ENV
   job2:
     docker:
       - image: alpine:latest
