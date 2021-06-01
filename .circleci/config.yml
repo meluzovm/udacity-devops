@@ -39,10 +39,10 @@ jobs:
       - run:
           name: Setup environment
           command: |
-            echo "API_URL=${BACKEND_URL}" >> "frontend/.env"
-            echo ENVIRONMENT=production > "frontend/.env"
-            echo NODE_ENV=production >> "frontend/.env"
-            cat "frontend/.env"
+            echo "API_URL=${BACKEND_URL}" >> ".env"
+            echo ENVIRONMENT=production > ".env"
+            echo NODE_ENV=production >> ".env"
+            cat ".env"
 
 workflows:
   welcome:
