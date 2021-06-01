@@ -4,22 +4,25 @@ jobs:
   job1:
     docker:
       - image: alpine:latest
-    shell: /bin/sh -leo pipefail
-    environment:
-      - BASH_ENV: /etc/profile
     steps:
       - run: 
           name: create vars
           command: |
+            touch $BASH_ENV
             export MM_VAR_1=$(echo "var1")  
             MM_VAR_2=$(echo "var2") 
             echo "export MM_VAR_2=$MM_VAR_2"
             echo 'export MM_VAR_2=$MM_VAR_2'  >> $BASH_ENV
+            MM_VAR_3=$(echo "var3") 
+            echo "export MM_VAR_3=123456" >> $BASH_ENV
+            echo $BASH_ENV
+            cat $BASH_ENV
       - run:
           name: output vars
           command: |
             echo $MM_VAR_1
             echo $MM_VAR_2
+            echo $MM_VAR_3
 workflows:
   welcome:
     jobs:
