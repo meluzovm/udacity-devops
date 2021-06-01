@@ -15,14 +15,6 @@ jobs:
             MM_VAR_2=$(echo "var2") 
             echo "export MM_VAR_2=$MM_VAR_2"
             echo 'export MM_VAR_2=$MM_VAR_2'  >> $BASH_ENV
-            #echo 'export VERY_IMPORTANT=$(cat important_value)' >> $BASH_ENV
-  job2:
-    docker:
-      - image: alpine:latest
-    shell: /bin/sh -leo pipefail
-    environment:
-      - BASH_ENV: /etc/profile
-    steps:
       - run:
           name: output vars
           command: |
@@ -32,6 +24,4 @@ workflows:
   welcome:
     jobs:
       - job1
-      - job2:
-          requires:
-            - job1
+
