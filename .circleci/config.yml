@@ -4,6 +4,9 @@ jobs:
   job1:
     docker:
       - image: alpine:latest
+    shell: /bin/sh -leo pipefail
+    environment:
+      - BASH_ENV: /etc/profile
     steps:
       - run: 
           name: create vars
@@ -11,7 +14,8 @@ jobs:
             export MM_VAR_1=$(echo "var1")  
             MM_VAR_2=$(echo "var2") 
             echo "export MM_VAR_2=$MM_VAR_2"
-            echo "export MM_VAR_2=$MM_VAR_2"  >> $BASH_ENV
+            echo 'export MM_VAR_2=$MM_VAR_2'  >> $BASH_ENV
+            #echo 'export VERY_IMPORTANT=$(cat important_value)' >> $BASH_ENV
   job2:
     docker:
       - image: alpine:latest
