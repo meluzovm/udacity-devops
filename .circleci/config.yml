@@ -11,24 +11,19 @@ jobs:
       - run: 
           name: create vars
           command: |
-            touch $BASH_ENV
+            #touch $BASH_ENV
             export MM_VAR_1=$(echo "var1")  
             MM_VAR_2=$(echo "var2") 
-            echo "export MM_VAR_2=$MM_VAR_2"
             echo "export MM_VAR_2=${MM_VAR_2}"  >> $BASH_ENV
-            MM_VAR_3=$(echo "var3") 
-            echo "export MM_VAR_3=123456" >> $BASH_ENV
-            echo $BASH_ENV
-            cat $BASH_ENV
+            MM_VAR_2_X=$(echo "var2x") 
+            echo "export MM_VAR_2_X=$MM_VAR_2_X"  >> $BASH_ENV
       - run:
           name: output vars
           command: |
-            echo $BASH_ENV
             echo $MM_VAR_1
             echo $MM_VAR_2
-            echo ${MM_VAR_2}
-            echo $MM_VAR_3
-            echo ${MM_VAR_3}
+
+
 workflows:
   welcome:
     jobs:
