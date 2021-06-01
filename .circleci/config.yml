@@ -1,176 +1,28 @@
----
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
-# Use a package of configuration called an orb.
-commands:
-  print_pipeline_id:
-    description: "A command to print Circle CI Workflow ID"
-    # parameters: 
-    steps:
-      - run: echo $CIRCLE_WORKFLOW_ID
-  delete_infrastructure:
-    description: "Delete stack completely"
-    parameters:
-      when_to_run:
-        type: string
-        default: "on_fail"
-    steps:
-      - run:
-          command: |
-            aws cloudformation delete-stack --stack-name aws-${CIRCLE_WORKFLOW_ID}
-          when: << parameters.when_to_run >>
-
 jobs:
-  ex1_print_hello:
+  job1:
     docker:
-      - image: circleci/node:13.8.0
+      - image: alpine:latest
     steps:
-      - run: echo "hello"
-      - run: sleep 1
-  ex1_print_world:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: echo "hello"
-  ex2_print_name:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: echo "hello $AUTHORNAME"  
-  ex3_save_hello_world_output:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: echo "hello world!" > /tmp/output.txt
-      - persist_to_workspace:
-          root: /tmp
-          paths:
-            - output.txt
-  ex3_print_output_file:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - attach_workspace:
-          at: /tmp
-      - run: cat /tmp/output.txt
-  ex4_use_command:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - print_pipeline_id
-  ex5_failed_job:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - run: return 1
-      - run:
-          name: "failed"
-          command: echo "previous step failed!"
-          when: on_fail
-  ex6_create_inventory:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - run: echo "[all]" > inventory.txt
-      - run: aws --version
-      - run: aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            --filters "Name=tag:Project,Values=udacity" \
-            --output text >> inventory.txt  
-      - save_cache:
-          key: $CIRCLE_SHA1
-          paths:
-            - inventory.txt
-      - run:
-          command: echo "something went wrong"
-          when: on_fail  
-  ex7_create_aws_infrastructure:
-    docker:
-      - image: amazon/aws-cli     
-    steps:
-      - checkout
-      - run: echo ${CIRCLE_WORKFLOW_ID} 
-      - run: aws cloudformation create-stack --stack-name aws-${CIRCLE_WORKFLOW_ID} --template-body file://module03-template.yml --parameters file://module03-properties.json 
-      - delete_infrastructure:
-          when_to_run: on_fail 
-  ex8_create_infrastructure:
-    docker: 
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "df:9b:20:79:f0:d5:a4:1f:9e:52:0c:5c:f3:b8:bd:c6"
-      - run:
-          name: Install dependencies
+      - run: 
+          name: create vars
           command: |
-            apk add --update ansible
-      - run: ls -la ~/project/task2/
-      - run:
-          name: Configure server
-          command: |
-            export ANSIBLE_HOST_KEY_CHECKING=False; ansible-playbook -i inventory ~/project/task2/main-remote.yml
-  ex9_smoke_test:
+            export VAR1 = $(echo "var1")
+            export VAR2 = $(echo "var2") 
+  job2:
     docker:
-      - image: amazon/aws-cli    
-    steps: 
-#      - run:
-#          name: Install curl
-#          command: |
-#            yum install add --update curl
-      - run: curl -s --head 3.67.226.177:3000
+      - image: alpine:latest
+    steps:
       - run:
+          name: output vars
           command: |
-            echo 'ERROR: Web Server is not accessible'
-          when: on_fail
-#      - run:
-#          command: |
-#            echo "OK: Web Server is  accessible"
-#          when: on_success
-      - run: return 1
-      - delete_infrastructure:
-          when_to_run: on_fail 
-#Solution from udacity:
-#        - run:
-#            name: smoke test.
-#            command: |
-#              URL="https://blog.udacity.com/"
-#              if curl -s --head ${URL} # test if blog.udacity. com exists
-#              then
-#               return 0
-#              else
-#               return 1
-#              fi
-
-          
+            echo $VAR1
+            echo $VAR2
 workflows:
-  # Name the workflow "welcome"
-#  welcome:
-    # Run the welcome/run job in its own container
-#    jobs:
-#      - ex1_print_hello
-#      - ex1_print_world:
-#          requires: 
-#            - ex1_print_hello
-#      - ex2_print_name:
-#          requires: 
-#            - ex1_print_world
-#      - ex3_save_hello_world_output
-#      - ex3_print_output_file:
-#          requires:
-#            - "ex3_save_hello_world_output"
-#
-#      - ex4_use_command
-#     - ex5_failed_job
-#      - ex6_create_inventory
-#      - ex7_create_infrastructure
-  infrastructure:
+  welcome:
     jobs:
-    - ex7_create_aws_infrastructure
-    - ex8_create_infrastructure:
-        requires:
-          - ex7_create_aws_infrastructure
-    - ex9_smoke_test:
-        requires:
-          - ex8_create_infrastructure
+      - job1
+      - job2:
+          requires:
+            - job1
