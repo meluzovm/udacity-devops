@@ -4,6 +4,9 @@ jobs:
   job1:
     docker:
       - image: alpine:latest
+    shell: /bin/sh -leo pipefail
+    environment:
+      - BASH_ENV: /etc/profile
     steps:
       - run: 
           name: create vars
@@ -13,6 +16,9 @@ jobs:
   job2:
     docker:
       - image: alpine:latest
+    shell: /bin/sh -leo pipefail
+    environment:
+      - BASH_ENV: /etc/profile
     steps:
       - run:
           name: output vars
