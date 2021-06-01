@@ -29,7 +29,7 @@ jobs:
             echo x
             echo $MM_VAR_2_X
             echo backend
-            echo "API_URL=\"${BACKEND_URL}\"" >> 1.txt
+            echo "API_URL=${BACKEND_URL} >> 1.txt
             cat 1.txt
 
 
