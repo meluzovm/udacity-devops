@@ -22,6 +22,8 @@ jobs:
           command: |
             echo $MM_VAR_1
             echo $MM_VAR_2
+            echo x
+            echo $MM_VAR_2_X
 
 
 workflows:
