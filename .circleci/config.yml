@@ -18,6 +18,9 @@ jobs:
             echo "export MM_VAR_2=${MM_VAR_2}"  >> $BASH_ENV
             MM_VAR_2_X=$(echo "var2x") 
             echo "export MM_VAR_2_X=$MM_VAR_2_X"  >> $BASH_ENV
+            BACKEND_IP=1.1.1.1
+            BACKEND_URL="http://${BACKEND_IP}:3030"
+            echo "export BACKEND_URL=${BACKEND_URL}" >> $BASH_ENV
       - run:
           name: output vars
           command: |
@@ -25,6 +28,9 @@ jobs:
             echo $MM_VAR_2
             echo x
             echo $MM_VAR_2_X
+            echo backend
+            echo "API_URL=\"${BACKEND_URL}\"" >> 1.txt
+            cat 1.txt
 
 
 workflows:
