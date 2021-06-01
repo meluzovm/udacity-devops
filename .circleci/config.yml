@@ -4,7 +4,7 @@ jobs:
   job1:
     docker:
     #  - image: alpine:latest
-      - image: circleci/python:3.8.9-node
+      - image: amazon/aws-cli
     #shell: /bin/sh -leo pipefail
     #environment:
     #  - BASH_ENV: /etc/profile
