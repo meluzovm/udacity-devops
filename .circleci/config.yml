@@ -8,8 +8,8 @@ jobs:
       - run: 
           name: create vars
           command: |
-            export MM1 = $(echo "var1")
-            export MM2 = $(echo "var2") 
+            export MM_VAR_1 = $(echo "var1")
+            export MM_VAR_2 = $(echo "var2") 
   job2:
     docker:
       - image: alpine:latest
@@ -17,8 +17,8 @@ jobs:
       - run:
           name: output vars
           command: |
-            echo $MM1
-            echo $MM"
+            echo $MM_VAR_1
+            echo $MM_VAR_2
 workflows:
   welcome:
     jobs:
